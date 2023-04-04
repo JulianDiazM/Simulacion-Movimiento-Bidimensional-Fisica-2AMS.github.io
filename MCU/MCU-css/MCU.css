@@ -4,8 +4,19 @@
     box-sizing: border-box;
 }
 
+.MCU {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 40px;
+    margin: 40px 40px;
+}
+
 .mcu-canvas {
     width: 400px;
     height: 400px;
     border: 1px solid #000;
+}
+
+.coords {
+    padding: 10px 0;
 }
