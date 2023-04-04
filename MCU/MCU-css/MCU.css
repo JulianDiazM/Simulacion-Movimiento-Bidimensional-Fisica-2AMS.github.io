@@ -5,6 +5,13 @@
     box-sizing: border-box;
 }
 
+/*Canvas donde se pinta la simulación del MCU*/
+.mcu-canvas {
+    width: 400px;
+    height: 400px;
+    border: 1px solid #000;
+}
+
 /*SECCIÓN DE PARÁMETROS*/
 .seccion-de-parametros {
     padding: 0 10px;
