@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="MCU-css/MCU.css">
+    <title>Movimiento Circular Uniforme</title>
+</head>
+<body>
+    <main>
+<!-- Formulario que recibe la combinación de parámetros para iniciar el simulador, además, recibe el valor de cada parámetro de la combinación escogida por el usuario -->
+        <form action="" class="seccion-de-parametros">
+            <!-- Lista desplegable con las posibles combinaciones de parámetros a elegir -->
+            <label for="selector_de_parametros">
+                <span class="init">Selecciona la combinación de parámetros con la que deseas iniciar el simulador:</span>
+                <select id="selector_de_parametros" class="selector_de_parametros">
+                    <option value="w, r">Velocidad angular y radio</option>
+                    <option value="V, r">Velocidad lineal y radio</option>
+                    <option value="T, r">Periodo y radio</option>
+                    <option value="f, r">Frecuencia y radio</option>
+                    <option value="ac, r">Aceleración centripeta y radio</option>
+                </select>
+            </label>
+            <!-- Label donde el usuario ingresa el valor del parámetro 1
+                 NOTA: Los parámetros por defecto son velocidad angular y radio
+            -->
+            <label for="parametro1" class="parametro1-label">
+                <span class="parametro1-label__descripcion">Valor de la velocidad angular (w): </span>
+                <input type="number" id="parametro1" class="parametro1__input">
+                <span class="parametro1-label__unidad-de-medida">rad/s</span>
+            </label>
+            <!-- Label donde el usuario ingresa el valor del parámetro 2 -->
+            <label for="parametro2" class="parametro2-label">
+                <span class="parametro2-label__descripcion">Valor del radio (r): </span>
+                <input type="number" id="parametro2">
+                <span class="parametro2-label__unidad-de-medida">m</span>
+            </label>
+        </form>
+        
+    </main>
+    <script src="MCU.js"></script>
+</body>
+</html>
