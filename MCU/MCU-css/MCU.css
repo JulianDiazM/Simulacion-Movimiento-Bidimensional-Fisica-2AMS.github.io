@@ -5,17 +5,49 @@
     box-sizing: border-box;
 }
 
+section {
+    display: inline-block;
+}
+
+/*SECCIÓN DE CANVAS*/
+.canvas_y_parametros {
+    display: flex;
+}
+
 /*Canvas donde se pinta la simulación del MCU*/
-.mcu-canvas {
+.canvas-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.canvas-section > canvas {
     width: 400px;
     height: 400px;
     border: 1px solid #000;
+    /*Este estilo de borde es temporal*/
+}
+
+.canvas-section > div {
+    display: flex;
+}
+
+.canvas-section > div > button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 10px;
+}
+
+.reboot-button {
+    display: none;
 }
 
 /*SECCIÓN DE PARÁMETROS*/
-.seccion-de-parametros {
+.seccion-de-parametros > form {
     padding: 0 10px;
-    border: 1px solid #000; /*Este estilo de borde es temporal*/
+    border: 1px solid #000;
+    /*Este estilo de borde es temporal*/
     width: 500px;
 }
 
