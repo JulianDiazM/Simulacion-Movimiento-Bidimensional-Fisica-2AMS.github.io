@@ -2,12 +2,14 @@
 function ElementoMCU(){
     let _w = 0;
     let _r = 0;
-    let _t = 0; //Estoy pensando en que esta variable sea pública
+    let _t = 0;
     let _V = 0;
     let _T = 0;
     let _f = 0;
     let _ac = 0;
-    let _theta = 0;
+    let _theta = 0; // Theta es el desplazamiento angular
+    let _alpha = 0;  //Angulo que indica el valor
+    let _numero_de_vueltas_completas = 0;
     let _caso_de_movimiento; //Variable usada para almacenar la combinación parámetros escogidos
     
     //Getters
@@ -39,7 +41,11 @@ function ElementoMCU(){
     this.getAceleracionCentripeta= function() {
         return _ac;
     }
-
+    
+    this.getValoresDeLosComponentes = function() {
+        return `w: ${_w.toFixed(2)}rad/s <br>r: ${_r.toFixed(2)}m <br>V: ${_V.toFixed(2)}m/s <br>T: ${_T.toFixed(2)}s <br>f: ${_f.toFixed(2)}Hz <br>ac: ${_ac.toFixed(2)}m/s^2 <br>θ: ${_theta.toFixed(2)}rad <br>t: ${_t.toFixed(2)}s <br>α: ${_alpha.toFixed(2)}º <br>Nº de vueltas: ${_numero_de_vueltas_completas}`;
+    }
+    
     this.imprimirComponentes = function() {
         console.log(`w: ${_w}\nr: ${_r}\nV: ${_V}\nT: ${_T}\nf: ${_T}\nac: ${_ac}`);
     }
@@ -72,6 +78,33 @@ function ElementoMCU(){
 
     this.setAceleracionCentripeta= function(ac) {
         _ac = ac;
+    }
+
+    this.setTiempoTranscurrido = function(t) {
+        _t = t;
+    }
+
+    this.setAngulo = function() {
+        _theta = _w * _t;
+    }
+
+    this.setAnguloSexagesimal = function() {
+        if (_alpha >= ((Math.PI * 2) * (180 / Math.PI))){
+            _alpha = 0;
+        }
+
+        else {
+            _alpha = _w * _t * (180 / Math.PI);
+        }
+
+        if(_numero_de_vueltas_completas != 0){
+            _alpha = ((_w * _t) - (Math.PI * 2 * _numero_de_vueltas_completas)) * (180 / Math.PI);
+        }
+    }
+
+    // Métodos
+    this.sumarVueltaCompleta = function() {
+        _numero_de_vueltas_completas++;
     }
 
     //Método que calcula los componentes del movimiento según la combinación de parámetros
@@ -155,6 +188,7 @@ function ElementoMCU(){
         _f = 0;
         _ac = 0;
         _theta = 0;
+        _numero_de_vueltas_completas = 0;
     }
 }
 
@@ -624,9 +658,11 @@ function dibujarTriangulo(x1, y1, x2, y2, x3, y3, color) {
 }
 
 //Función que escribe texto en el canvas
-function escribirTexto(font, message, x, y) {
+function escribirTexto(font, message, x, y, color) {
     ctx.font = font;
+    ctx.fillStyle = color;
     ctx.fillText(message, x, y);
+    ctx.fillStyle = "#000";
 }
 
 //Función que pinta el eje x, el cual hace referencia al tamaño del radio de la trayectoria y los valores máximos de posición en x del elemento
@@ -638,11 +674,11 @@ function pintarEjeX() {
 
     dibujarRecta(xi, yi, xf, yf, "#000"); //Trazo del eje cartesiano x
     dibujarRecta(canvas_x_center, (yi + 10), canvas_x_center, (yi - 10)); //Trazo de la recta que indica el centro de la circunferencia
-    escribirTexto("20px Calibri", 0, (canvas_x_center - 5), (yi - 15));
+    escribirTexto(fuente, 0, (canvas_x_center - 5), (yi - 15));
     dibujarRecta(xi, yi + 10, xi, yi - 10); //Trazo de la recta que indica el radio de la circunferencia (cuadrante II)
-    escribirTexto("20px Calibri", `-${param2.value}m`, (xi -17), (yi - 15));
+    escribirTexto(fuente, `-${param2.value}m`, (xi -17), (yi - 15));
     dibujarRecta(xf, yi + 10, xf, yi - 10); //Trazo de la recta que indica el radio de la circunferencia (cuadrante I)
-    escribirTexto("20px Calibri", `${param2.value}m`, (xf -10), (yi - 15));
+    escribirTexto(fuente, `${param2.value}m`, (xf -10), (yi - 15));
 }
 
 //Función que pinta el eje y, el cual hace referencia al tamaño del radio de la trayectoria y los valores máximos de posición en y del elemento
@@ -654,11 +690,11 @@ function pintarEjeY() {
     
     dibujarRecta(xi, yi, xf, yf, "#000");
     dibujarRecta((xi - 10), canvas_y_center, (xi + 10), canvas_y_center); //Trazo de la recta que indica el centro de la circunferencia
-    escribirTexto("20px Calibri", 0, (xi + 15), (canvas_y_center +5));
+    escribirTexto(fuente, 0, (xi + 15), (canvas_y_center +5));
     dibujarRecta((xi - 10), yi, (xi + 10), yi); //Trazo de la recta que indica el radio de la circunferencia (cuadrante I y II)
-    escribirTexto("20px Calibri", `${param2.value}m`, (xi - 10), (yi - 8));
+    escribirTexto(fuente, `${param2.value}m`, (xi - 10), (yi - 8));
     dibujarRecta((xi - 10), yf, (xi + 10), yf); //Trazo de la recta que indica el radio de la circunferencia (cuadrante III y IV)
-    escribirTexto("20px Calibri", `-${param2.value}m`, (xi - 10), (yf + 20));
+    escribirTexto(fuente, `-${param2.value}m`, (xi - 10), (yf + 20));
 }
 
 //Función que valida los parámetros, evitando que el valor del input quede vacio

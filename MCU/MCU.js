@@ -16,26 +16,30 @@ const param2 = document.querySelector("#parametro2"); // <input> que es el pará
 const checkbox_velocidad = document.querySelector(".checkbox-velocidad");
 const componentes_velocidad = document.querySelectorAll(".componentes-velocidad");
 const checkbox_aceleracion = document.querySelector(".checkbox-aceleracion");
-const componentes_aceleracion = document.querySelectorAll(".componentes-aceleracion"); // Elementos HTML usados para controlar la visualización de vectores
-const checkbox_componentes_posicion = document.querySelector(".componentes-posicion");
+const componentes_aceleracion = document.querySelectorAll(".componentes-aceleracion"); 
+const checkbox_componentes_posicion = document.querySelector(".componentes-posicion"); // Elementos HTML usados para controlar la visualización de vectores
+
+/*Elementos HTML de la sección de visualización de valores de componentes*/
+const msg_con_valores = document.querySelector(".valores-de-componentes");
 
 //Definición del tamaño del canvas en escala 1:1
 canvas.height = 600;
 canvas.width = canvas.height;
-ctx.font = "20px Arial"; //Tamaño y tipo de fuente en el canvas
+let fuente = "20px Arial"; //Tamaño y tipo de fuente en el canvas
 
 //Declaración de variables
+let tiempo_transcurrido = 0;
 let estado_del_boton = false; // Para el boton de inicio/pausa | false → pausado, true → en ejecución
 let estado_de_simulacion = false; // false → simulador no iniciado | true → simulador iniciado
 let n_de_toques_del_start_button = 0;
-let elemento; // Contendrá el elemento (como objeto) sujeto al pendulo
+let elemento = new ElementoMCU(); // Se crea el objeto del MCU
 let vectorVelocidad = new VectorVelocidad();
 let vectorAceleracion = new VectorAceleracion();
 let vectorPosicion = new VectorPosicion();
 let simular; // Contendrá el temporizador para poder realizar la animación de simulación
 let endAngle = 0; // Contendrá el valor de theta o angulo del movimiento
 let decremento = 0; // Contendrá el decremento angular por cada actualización
-let actualizaciones_por_segundo = 100; // 50 ya que se cambiaran los datos cada 20ms
+let actualizaciones_por_segundo = 100; // 100 ya que se cambiaran los datos cada 10ms
 let intervalo_de_actualizacion = 1000 / actualizaciones_por_segundo; // Contendrá el valor en ms
 let radio = 125; // Radio de la circunferencia pintada (Usado solo en el <canvas>)
 let valor_parametro1 = parseFloat(param1.value); // (Componente del elemento) Usada para poder calcular los componentes del elemento
@@ -140,7 +144,6 @@ start_button.addEventListener("click", () => {
     n_de_toques_del_start_button++;
 
     if(n_de_toques_del_start_button == 1) { // EL usuario inició la simulación por primera vez
-        elemento = new ElementoMCU(); // Se crea el objeto del MCU
         elemento.setCasoDeMovimiento(selector_de_parametros.value);
         param1.value = validarParametro(param1.value); valor_parametro1 = parseFloat(param1.value); // Se cambia el valor de los parámetros por si el usuario olvida de hacerlo con la tecla Enter
         param2.value = validarParametro(param2.value); valor_parametro2 = parseFloat(param2.value);
@@ -180,11 +183,13 @@ reboot_button.addEventListener("click", () => {
 
     elemento.reiniciarComponentesMCU(); // Se establece en 0 todos los componentes del movimiento
     n_de_toques_del_start_button = 0;
+    tiempo_transcurrido = 0;
     estado_de_simulacion = false; // Se reinicia toda la simulación
     reboot_button.style.display = "none"; // Se desactiva el boton de reinicio
     param1.readOnly = false;
     param2.readOnly = false; // Se habilita la edición de los parámetros nuevamente
     selector_de_parametros.disabled = false; //Se habilita la lista desplegable nuevamente
+    msg_con_valores.innerHTML = `w: 0rad/s <br>r: 0m <br>V: 0m/s<br>T: 0s<br>f: 0Hz<br>ac: 0m/s^2<br>θ: 0º<br>t: 0s<br>α: 0º <br>Nº de vueltas: 0`;
     start_button__icon.classList.remove('fa-pause');
     start_button__icon.classList.add("fa-play");
     clearInterval(simular);
@@ -244,9 +249,35 @@ function pendulo() {
         if (checkbox_componentes_posicion.checked) {
             vectorPosicion.pintarComponentesVector();
         }
+        
+        if (elemento.getRadio() !== 0) {
+            msg_con_valores.innerHTML = elemento.getValoresDeLosComponentes();
+        }
+
+        tiempo_transcurrido += 0.01;
+        elemento.setTiempoTranscurrido(tiempo_transcurrido);
+        elemento.setAngulo();
+        elemento.setAnguloSexagesimal();
+
         endAngle -= decremento;
+
+        escribirTexto(fuente, "Vx:", 20, 520, "blue");
+        escribirTexto(fuente, (elemento.getVelocidadLineal() * Math.cos(endAngle - (Math.PI / 2))).toFixed(2), 50, 520, "blue");
+        escribirTexto(fuente, "Vy:", 20, 545, "blue");
+        escribirTexto(fuente, -(elemento.getVelocidadLineal() * Math.sin(endAngle - (Math.PI / 2))).toFixed(2), 50, 545, "blue");
+
+        escribirTexto(fuente, "ax:", 120, 520, "red");
+        escribirTexto(fuente, -(elemento.getAceleracionCentripeta() * Math.cos(endAngle)).toFixed(2), 158, 520, "red");
+        escribirTexto(fuente, "ay:", 120, 545, "red");
+        escribirTexto(fuente, (elemento.getAceleracionCentripeta() * Math.sin(endAngle)).toFixed(2), 158, 545, "red");
+
+        escribirTexto(fuente, "x:", 230, 520, "green");
+        escribirTexto(fuente, (elemento.getRadio() * Math.cos(endAngle)).toFixed(2), 255, 520, "green");
+        escribirTexto(fuente, "y:", 230, 545, "green");
+        escribirTexto(fuente, -(elemento.getRadio() * Math.sin(endAngle)).toFixed(2), 255, 545, "green");
     }
     else {
         endAngle = 0;
+        elemento.sumarVueltaCompleta();
     }
 }

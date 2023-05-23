@@ -67,7 +67,7 @@ section {
 }
 
 /*SECCIÓN DE VISUALIZACIÓN DE VECTORES*/
-.visualizacion-de-vectores {
+.visualizacion-de-vectores, .visualizacion-de-valores {
     border: 1px solid #000; /*Borde de temporal*/
     padding: 10px;
 }
@@ -87,4 +87,14 @@ section {
 
 .componentes > input, .componentes > span {
     display: none;
+}
+
+/*SECCIÓN DE VISUALIZACIÓN DE VALORES*/
+.visualizacion-de-valores {
+    display: flex;
+    justify-content: space-around;
+}
+
+.visualizacion-de-valores p {
+    line-height: 20px;
 }
