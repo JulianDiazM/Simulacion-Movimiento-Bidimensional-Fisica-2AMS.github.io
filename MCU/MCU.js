@@ -22,6 +22,9 @@ const checkbox_componentes_posicion = document.querySelector(".componentes-posic
 /*Elementos HTML de la sección de visualización de valores de componentes*/
 const msg_con_valores = document.querySelector(".valores-de-componentes");
 
+/*Elementos HTML de la sección de fórmulas usadas en la simulación */
+const img_src = document.querySelector(".imagen-formulas");
+
 //Definición del tamaño del canvas en escala 1:1
 canvas.height = 600;
 canvas.width = canvas.height;
@@ -56,26 +59,31 @@ selector_de_parametros.addEventListener("change", () => {
         case "w, r": // El usuario escogió velocidad angular y radio
             param1_desc.innerHTML = `Valor de la velocidad angular (w): `;
             param1_um.innerHTML = `rad/s`;
+            img_src.src = `imagenes-formulas/formula-caso1.png`;
             break;
 
         case "V, r": // El usuario escogió velocidad lineal y radio
             param1_desc.innerHTML = `Valor de la velocidad lineal (V): `;
             param1_um.innerHTML = `m/s`;
+            img_src.src = `imagenes-formulas/formula-caso2.png`;
             break;
 
         case "T, r": // El usuario escogió periodo y radio
             param1_desc.innerHTML = `Periodo del movimiento (T): `;
             param1_um.innerHTML = `s`;
+            img_src.src = `imagenes-formulas/formula-caso3.png`;
             break;
 
         case "f, r": // El usuario escogió frecuencia y radio
             param1_desc.innerHTML = `Frecuencia del movimiento (f): `;
             param1_um.innerHTML = `Hz`;
+            img_src.src = `imagenes-formulas/formula-caso4.png`;
             break;
 
         case "ac, r": // El usuario escogió aceleración centripeta y radio
             param1_desc.innerHTML = `Valor de la aceleración centripeta (ac): `;
             param1_um.innerHTML = `m/s^2`;
+            img_src.src = `imagenes-formulas/formula-caso5.png`;
             break;
     }
 });

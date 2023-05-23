@@ -9,6 +9,24 @@
     --canvas-width-and-height: 600px;
 }
 
+body {
+    width: 100vw;
+    height: 100vh;
+    background: rgb(235, 181, 102);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+main > h1 {
+    text-align: center;
+    margin: 20px 0;
+    color: #fff;
+}
+
 section {
     display: inline-block;
 }
@@ -16,6 +34,7 @@ section {
 /*SECCIÓN DE CANVAS*/
 .canvas_y_parametros {
     display: flex;
+    margin: auto;
 }
 
 /*Canvas donde se pinta la simulación del MCU*/
@@ -23,13 +42,15 @@ section {
     display: flex;
     flex-direction: column;
     align-items: center;
+    border: 1px solid #000;
+    padding: 5px 0 10px 10px;
+    background: #FFF;
+    /*Este estilo de borde es temporal*/
 }
 
 .canvas-section > canvas {
     width: var(--canvas-width-and-height);
     height: var(--canvas-width-and-height);
-    border: 1px solid #000;
-    /*Este estilo de borde es temporal*/
 }
 
 .canvas-section > div {
@@ -54,11 +75,12 @@ section {
     flex-direction: column;
 }
 
-.seccion-de-parametros > form {
-    padding: 0 10px;
+.seccion-de-parametros {
+    padding: 5px 0 10px 10px;
     border: 1px solid #000;
     /*Este estilo de borde es temporal*/
     width: 500px;
+    background: #FFF;
 }
 
 .init, .selector_de_parametros, .parametro1-label, .parametro2-label {
@@ -69,7 +91,8 @@ section {
 /*SECCIÓN DE VISUALIZACIÓN DE VECTORES*/
 .visualizacion-de-vectores, .visualizacion-de-valores {
     border: 1px solid #000; /*Borde de temporal*/
-    padding: 10px;
+    padding: 5px 0 10px 10px;
+    background: #FFF;
 }
 
 .visualizacion-de-vectores > ul {
@@ -92,9 +115,24 @@ section {
 /*SECCIÓN DE VISUALIZACIÓN DE VALORES*/
 .visualizacion-de-valores {
     display: flex;
+    flex-direction: column;
+}
+
+.block1 {
+    display: flex;
     justify-content: space-around;
 }
 
 .visualizacion-de-valores p {
     line-height: 20px;
+}
+
+/*SECCIÓN DE VISUALIZACIÓN DE FÓRMULAS IMPLEMENTADAS*/
+.formulas-usadas {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid #000;
+    padding: 5px 0 10px 10px;
+    background: #FFF;
 }

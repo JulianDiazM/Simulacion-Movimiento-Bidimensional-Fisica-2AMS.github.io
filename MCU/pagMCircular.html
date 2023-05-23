@@ -10,20 +10,23 @@
 </head>
 <body>
     <main>
+        <h1>Movimiento Circular Uniforme</h1>
         <div class="canvas_y_parametros">      
             <section class="canvas-section"> <!-- Sección donde se lleva a cabo la simulación -->
-                <canvas class="mcu-canvas"></canvas>
-                <div>
-                    <button class="reboot-button">
-                        <i class="fa-solid fa-stop"></i>
-                    </button>
-                    <button class="start-button">
-                    <i class="fa-solid fa-play" id="button-icon"></i>
-                    </button>
-                </div>
+                    <h2>Zona de simulación</h2>
+                    <canvas class="mcu-canvas"></canvas>
+                    <div>
+                        <button class="reboot-button">
+                            <i class="fa-solid fa-stop"></i>
+                        </button>
+                        <button class="start-button">
+                        <i class="fa-solid fa-play" id="button-icon"></i>
+                        </button>
+                    </div>
             </section>
             <div class="column1">                
                 <section class="seccion-de-parametros"> <!-- Sección donde el usuario selecciona la combinación de parámetros e ingresa el valor de estos -->
+                    <h2>Parámetros</h2>
                     <form action="">
                         <label for="selector_de_parametros">
                             <span class="init">Selecciona la combinación de parámetros con la que deseas iniciar el simulador:</span>
@@ -52,6 +55,7 @@
                     </form>
                 </section>
                 <section class="visualizacion-de-vectores"> <!-- Sección donde el usuario controla la visualización de vectores de la simulación -->
+                    <h2>Visualización de vectores</h2>
                     <ul>
                         <li>
                             <input type="checkbox" class="checkbox-velocidad">
@@ -76,12 +80,19 @@
                     </ul>
                 </section>
                 <section class="visualizacion-de-valores"> <!-- Sección donde el usuario podrá visualizar los componentes del movimiento -->
-                    <div class="colum1">
-                        <p class="valores-de-componentes">w: 0rad/s <br>r: 0m <br>V: 0m/s<br>T: 0s<br>f: 0Hz<br>ac: 0m/s^2<br>θ: 0rads<br>t: 0s<br>α: 0º<br>Nº de vueltas: 0</p>
+                    <h2>Componentes del movimiento</h2>
+                    <div class="block1">
+                        <div class="colum1">
+                            <p class="valores-de-componentes">w: 0rad/s <br>r: 0m <br>V: 0m/s<br>T: 0s<br>f: 0Hz<br>ac: 0m/s^2<br>θ: 0rads<br>t: 0s<br>α: 0º<br>Nº de vueltas: 0</p>
+                        </div>
+                        <div class="colum2">
+                            <p>w = Velocidad angular.<br>r = Radio.<br>V = Velocidad lineal.<br>T = Periodo.<br>f = Frecuencia.<br>ac = Aceleración centripeta.<br>θ = Desplazamiento angular.<br>t = Tiempo transcurrido.<br>α = Ángulo sexagesimal.</p>
+                        </div>
                     </div>
-                    <div class="colum2">
-                        <p>w = Velocidad angular.<br>r = Radio.<br>V = Velocidad lineal.<br>T = Periodo.<br>f = Frecuencia.<br>ac = Aceleración centripeta.<br>θ = Desplazamiento angular.<br>t = Tiempo transcurrido.<br>α = Ángulo sexagesimal.</p>
-                    </div>
+                </section>
+                <section class="formulas-usadas">
+                    <h2>Fórmulas empleadas</h2>
+                    <img src="imagenes-formulas/formula-caso1.png" alt="" class="imagen-formulas">
                 </section>
             </div>
         </div>
