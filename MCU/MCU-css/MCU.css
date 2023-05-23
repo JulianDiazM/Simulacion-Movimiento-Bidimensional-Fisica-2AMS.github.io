@@ -5,6 +5,10 @@
     box-sizing: border-box;
 }
 
+:root {
+    --canvas-width-and-height: 600px;
+}
+
 section {
     display: inline-block;
 }
@@ -22,8 +26,8 @@ section {
 }
 
 .canvas-section > canvas {
-    width: 400px;
-    height: 400px;
+    width: var(--canvas-width-and-height);
+    height: var(--canvas-width-and-height);
     border: 1px solid #000;
     /*Este estilo de borde es temporal*/
 }
@@ -44,6 +48,12 @@ section {
 }
 
 /*SECCIÓN DE PARÁMETROS*/
+
+.column1 {
+    display: flex;
+    flex-direction: column;
+}
+
 .seccion-de-parametros > form {
     padding: 0 10px;
     border: 1px solid #000;
@@ -54,4 +64,27 @@ section {
 .init, .selector_de_parametros, .parametro1-label, .parametro2-label {
     display: block;
     margin: 10px 0;
+}
+
+/*SECCIÓN DE VISUALIZACIÓN DE VECTORES*/
+.visualizacion-de-vectores {
+    border: 1px solid #000; /*Borde de temporal*/
+    padding: 10px;
+}
+
+.visualizacion-de-vectores > ul {
+    list-style: none;
+}
+
+.visualizacion-de-vectores > ul > li {
+    display: block;
+    padding: 5px 0;
+}
+
+.componentes {
+    margin-left: 15px;
+}
+
+.componentes > input, .componentes > span {
+    display: none;
 }

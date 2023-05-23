@@ -4,7 +4,6 @@ const ctx = canvas.getContext("2d");
 const start_button = document.querySelector(".start-button"); // Boton de inicio o pausa
 const start_button__icon = document.querySelector("#button-icon"); // Icono del boton de inicio o pausa
 const reboot_button = document.querySelector(".reboot-button"); // Boton de reinicio
-let estado_del_boton = false; // Para el boton de inicio/pausa | false → pausado, true → en ejecución
 
 /*Elementos HTML de la sección de parámetros*/
 const selector_de_parametros = document.querySelector("#selector_de_parametros"); // Lista desplegable con las combinaciones de parámetros
@@ -13,15 +12,23 @@ const param1_desc = document.querySelector(".parametro1-label__descripcion"); //
 const param1_um = document.querySelector(".parametro1-label__unidad-de-medida"); // <span> que incluye la unidad de medida del parámetro 1
 const param2 = document.querySelector("#parametro2"); // <input> que es el parámetro 2
 
+/*Elementos HTML de la sección de visualización de vectores*/
+const checkbox_velocidad = document.querySelector(".checkbox-velocidad");
+const componentes_velocidad = document.querySelectorAll(".componentes-velocidad");
+const checkbox_aceleracion = document.querySelector(".checkbox-aceleracion");
+const componentes_aceleracion = document.querySelectorAll(".componentes-aceleracion"); // Elementos HTML usados para controlar la visualización de vectores
+
 //Definición del tamaño del canvas en escala 1:1
-canvas.height = 400;
+canvas.height = 600;
 canvas.width = canvas.height;
 ctx.font = "20px Arial"; //Tamaño y tipo de fuente en el canvas
 
 //Declaración de variables
+let estado_del_boton = false; // Para el boton de inicio/pausa | false → pausado, true → en ejecución
 let estado_de_simulacion = false; // false → simulador no iniciado | true → simulador iniciado
 let n_de_toques_del_start_button = 0;
 let elemento; // Contendrá el elemento (como objeto) sujeto al pendulo
+let vectorVelocidad = new Vector();
 let simular; // Contendrá el temporizador para poder realizar la animación de simulación
 let endAngle = 0; // Contendrá el valor de theta o angulo del movimiento
 let decremento = 0; // Contendrá el decremento angular por cada actualización
@@ -66,6 +73,35 @@ selector_de_parametros.addEventListener("change", () => {
     }
 });
 
+//Evento que modifica el display del checkbox de los componentes del vector velocidad
+checkbox_velocidad.addEventListener("change", function() {
+    if (checkbox_velocidad.checked) {
+      componentes_velocidad[0].style.display = "inline-block";
+      componentes_velocidad[1].style.display = "inline-block";
+    } else {
+      componentes_velocidad[0].style.display = "none";
+      componentes_velocidad[1].style.display = "none";
+      componentes_velocidad[0].checked = false;
+    }
+    endAngle += decremento; pendulo();
+  });
+
+componentes_velocidad[0].addEventListener("change", () => {
+    endAngle += decremento; pendulo();
+});
+
+//Evento que modifica el display del checkbox de los componentes del vector aceleración
+  checkbox_aceleracion.addEventListener("change", function() {
+    if (checkbox_aceleracion.checked) {
+        componentes_aceleracion[0].style.display = "inline-block";
+        componentes_aceleracion[1].style.display = "inline-block"
+    } else {
+        componentes_aceleracion[0].style.display = "none";
+        componentes_aceleracion[1].style.display = "none";
+        componentes_aceleracion[0].checked = false;
+    }
+});
+
 // Evento que modifica el valor ingresado del componente al pulsar Enter
 param1.addEventListener("keydown", (event) => {
     if(!estado_de_simulacion){
@@ -89,19 +125,22 @@ param2.addEventListener("keydown", (event) => {
 
 // Evento que detiene/reanuda la simulación y cambia el icono del boton correspondiente
 start_button.addEventListener("click", () => {
-    elemento = new ElementoMCU(); // Se crea el objeto del MCU
     n_de_toques_del_start_button++;
 
     if(n_de_toques_del_start_button == 1) { // EL usuario inició la simulación por primera vez
+        elemento = new ElementoMCU(); // Se crea el objeto del MCU
+        elemento.setCasoDeMovimiento(selector_de_parametros.value);
         param1.value = validarParametro(param1.value); valor_parametro1 = parseFloat(param1.value); // Se cambia el valor de los parámetros por si el usuario olvida de hacerlo con la tecla Enter
         param2.value = validarParametro(param2.value); valor_parametro2 = parseFloat(param2.value);
-        calcularComponentesOrdenadamente(elemento, selector_de_parametros.value, valor_parametro1, valor_parametro2);
+        elemento.calcularComponentesOrdenadamente(valor_parametro1, valor_parametro2);
         pintarEjeX(); pintarEjeY();
-    }
+        elemento.calcularComponentes(); // Cálculo de los componentes del movimiento
 
-    elemento.calcularComponentes(selector_de_parametros.value); // Cálculo de los componentes del movimiento
-    decremento = elemento.w / actualizaciones_por_segundo;
-    estado_de_simulacion = true;
+        vectorVelocidad.setMagnitud(elemento.getVelocidadLineal());
+        decremento = elemento.getVelocidadAngular() / actualizaciones_por_segundo;
+        estado_de_simulacion = true;
+    }
+    
     reboot_button.style.display = "inline-block"; // Se activa el boton de reinicio
     param1.readOnly = true; 
     param2.readOnly = true; // Se deshabilita la edición de los parámetros
@@ -126,7 +165,7 @@ reboot_button.addEventListener("click", () => {
         estado_del_boton = !estado_del_boton;
     }
 
-    reiniciarComponentesMCU(elemento); // Se establece en 0 todos los componentes del movimiento
+    elemento.reiniciarComponentesMCU(); // Se establece en 0 todos los componentes del movimiento
     n_de_toques_del_start_button = 0;
     estado_de_simulacion = false; // Se reinicia toda la simulación
     reboot_button.style.display = "none"; // Se desactiva el boton de reinicio
@@ -157,6 +196,18 @@ function pendulo() {
         dibujarCirculoSinRelleno(canvas_x_center, canvas_y_center, radio, 0, Math.PI * 2, "#000"); //Trazo de la trayectoria
         dibujarRecta(canvas_x_center, canvas_y_center, object_x, object_y, "#000"); //Trazo del pendulo
         dibujarCirculoRelleno(object_x, object_y, 5, 0, Math.PI * 2, "#000"); //Trazo del elemento
+        vectorVelocidad.setPosicionInicial(object_x, object_y);
+        vectorVelocidad.setAngulo(endAngle - (Math.PI / 2));
+        vectorVelocidad.calcularComponentes();
+        vectorVelocidad.setPosicionFinal(vectorVelocidad.getComponenteX(), vectorVelocidad.getComponenteY());
+        
+        if(checkbox_velocidad.checked) {
+            vectorVelocidad.pintarVector();
+        }
+
+        if (componentes_velocidad[0].checked) {
+            vectorVelocidad.pintarComponentesVector();
+        }
         endAngle -= decremento;
     }
     else {

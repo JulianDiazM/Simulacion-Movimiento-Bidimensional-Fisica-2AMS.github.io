@@ -10,8 +10,8 @@
 </head>
 <body>
     <main>
-        <div class="canvas_y_parametros">
-            <section class="canvas-section">
+        <div class="canvas_y_parametros">            
+            <section class="canvas-section"> <!-- Sección donde se lleva a cabo la simulación -->
                 <canvas class="mcu-canvas"></canvas>
                 <div>
                     <button class="reboot-button">
@@ -22,36 +22,60 @@
                     </button>
                 </div>
             </section>
-            <section class="seccion-de-parametros">
-                <!-- Formulario que recibe la combinación de parámetros para iniciar el simulador, además, recibe el valor de cada parámetro de la combinación escogida por el usuario -->
-                <form action="">
-                    <!-- Lista desplegable con las posibles combinaciones de parámetros a elegir -->
-                    <label for="selector_de_parametros">
-                        <span class="init">Selecciona la combinación de parámetros con la que deseas iniciar el simulador:</span>
-                        <select id="selector_de_parametros" class="selector_de_parametros">
-                            <option value="w, r">Velocidad angular y radio</option>
-                            <option value="V, r">Velocidad lineal y radio</option>
-                            <option value="T, r">Periodo y radio</option>
-                            <option value="f, r">Frecuencia y radio</option>
-                            <option value="ac, r">Aceleración centripeta y radio</option>
-                        </select>
-                    </label>
-                    <!-- Label donde el usuario ingresa el valor del parámetro 1
-                         NOTA: Los parámetros por defecto son velocidad angular y radio
-                    -->
-                    <label for="parametro1" class="parametro1-label">
-                        <span class="parametro1-label__descripcion">Valor de la velocidad angular (w): </span>
-                        <input type="number" id="parametro1" class="parametro1__input" value="1">
-                        <span class="parametro1-label__unidad-de-medida">rad/s</span>
-                    </label>
-                    <!-- Label donde el usuario ingresa el valor del parámetro 2 -->
-                    <label for="parametro2" class="parametro2-label">
-                        <span class="parametro2-label__descripcion">Valor del radio (r): </span>
-                        <input type="number" id="parametro2"  value="1">
-                        <span class="parametro2-label__unidad-de-medida">m</span>
-                    </label>
-                </form>
-            </section>
+            <div class="column1">                
+                <section class="seccion-de-parametros"> <!-- Sección donde el usuario selecciona la combinación de parámetros e ingresa el valor de estos -->
+                    <form action="">
+                        <label for="selector_de_parametros">
+                            <span class="init">Selecciona la combinación de parámetros con la que deseas iniciar el simulador:</span>
+                            <select id="selector_de_parametros" class="selector_de_parametros">
+                                <option value="w, r">Velocidad angular y radio</option>
+                                <option value="V, r">Velocidad lineal y radio</option>
+                                <option value="T, r">Periodo y radio</option>
+                                <option value="f, r">Frecuencia y radio</option>
+                                <option value="ac, r">Aceleración centripeta y radio</option>
+                            </select>
+                        </label>
+                        <!-- Label donde el usuario ingresa el valor del parámetro 1
+                             NOTA: Los parámetros por defecto son velocidad angular y radio
+                        -->
+                        <label for="parametro1" class="parametro1-label">
+                            <span class="parametro1-label__descripcion">Valor de la velocidad angular (w): </span>
+                            <input type="number" id="parametro1" class="parametro1__input" value="1">
+                            <span class="parametro1-label__unidad-de-medida">rad/s</span>
+                        </label>
+                        <!-- Label donde el usuario ingresa el valor del parámetro 2 -->
+                        <label for="parametro2" class="parametro2-label">
+                            <span class="parametro2-label__descripcion">Valor del radio (r): </span>
+                            <input type="number" id="parametro2"  value="1">
+                            <span class="parametro2-label__unidad-de-medida">m</span>
+                        </label>
+                    </form>
+                </section>
+                <section class="visualizacion-de-vectores"> <!-- Sección donde el usuario controla la visualización de vectores de la simulación -->
+                    <ul>
+                        <li>
+                            <input type="checkbox" class="checkbox-velocidad">
+                            <span>Visualizar el vector de velocidad</span>
+                            <li class="componentes">
+                                <input type="checkbox" class="componentes-velocidad">
+                                <span class="componentes-velocidad">Visualizar componentes del vector velocidad</span>
+                            </li>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="checkbox-aceleracion">
+                            <span>Visualizar el vector de aceleración</span>        
+                            <li class="componentes">
+                                <input type="checkbox" class="componentes-aceleracion">
+                                <span class="componentes-aceleracion">Visualizar componentes del vector aceleración</span>        
+                            </li>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="componentes-posicion">
+                            <span>Visualizar los componentes de la posición</span>
+                        </li>
+                    </ul>
+                </section>
+            </div>
         </div>
     </main>
     <script src="Functions.js"></script>
