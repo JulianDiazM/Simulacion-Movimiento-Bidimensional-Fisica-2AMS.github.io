@@ -158,8 +158,8 @@ function ElementoMCU(){
     }
 }
 
-// Función constructora de un vector (No hablamos de arrays)
-function Vector(xi = 0, yi = 0, xf = 0, yf = 0, color = "blue") {
+// Función constructora de un vector de velocidad
+function VectorVelocidad(xi = 0, yi = 0, xf = 0, yf = 0, color = "blue") {
      let _color = color;
      let _xi = xi;
      let _yi = yi;
@@ -309,6 +309,161 @@ function Vector(xi = 0, yi = 0, xf = 0, yf = 0, color = "blue") {
     this.imprimirDatos = function() {
         console.log(`Magnitud: ${_magnitud}\nX: ${_componenteX}\nY: ${_componenteY}\n Angulo: ${_angulo}`);
     }
+}
+
+// Función constructora de un vector de aceleración
+function VectorAceleracion(xi = 0, yi = 0, xf = 0, yf = 0, color = "red") {
+    let _color = color;
+    let _xi = xi;
+    let _yi = yi;
+    let _xf = xf;
+    let _yf = yf;
+    let _magnitud = 0;
+    let _componenteX = 0;
+    let _componenteY = 0;
+    let _angulo = 0;
+
+   //Getters
+
+   this.getColor = function() {
+       return _color;
+   }
+
+   this.getXi = function() {
+       return _xi;
+   }
+
+   this.getYi = function() {
+       return _yi;
+   }
+
+   this.getXf = function() {
+       return _xf;
+   }
+
+   this.getYf = function() {
+       return _yf;
+   }
+
+   this.getMagnitud = function() {
+       return _magnitud;
+   }
+
+   this.getComponenteX = function() {
+       return _componenteX;
+   }
+
+   this.getComponenteY = function() {
+       return _componenteY;
+   }
+
+   this.getAngulo = function() {
+       return _angulo;
+   }
+
+   //Setters
+
+   this.setColor = function(color) {
+       _color = color;
+   }
+   
+   this.setPosicionInicial = function(xi = this.xi, yi = this.yi) {
+       _xi = xi;
+       _yi = yi;
+   }
+
+   this.setPosicionFinal = function(xf, yf) {
+       _xf = xf;
+       _yf = yf;
+   }
+
+   this.setMagnitud = function(magnitud) {
+       if(magnitud > 20.8){
+           _magnitud = 125;
+       }
+
+       else if(magnitud < 1){
+           _magnitud = (125 / 20.8);
+       }
+
+       else {
+           _magnitud = (magnitud * (125 / 20.8));
+       }
+   }
+
+   this.setAngulo = function(angulo) {
+       _angulo = angulo;
+   }
+
+   //Métodos
+   this.calcularComponentes = function() {
+    /*Aqui se consideraria colocar una condición ya que la suma o resta varia segun del cuadrante en el que se encuentre el pendulo*/
+       _componenteX = _xi - (_magnitud * Math.cos(_angulo));
+       _componenteY = _yi - (_magnitud * Math.sin(_angulo));
+   }
+
+   this.pintarVector = function() {
+       dibujarRecta(_xi, _yi, _xf, _yf, _color, 3);
+       let L = 10;
+       let x1 = ((_xf) - ((L / 2) * Math.cos(_angulo - (Math.PI / 2)))); let y1 = ((_yf) - ((L / 2) * Math.sin(_angulo - (Math.PI / 2))));
+       let x2 = ((_xf) + ((L / 2) * Math.cos(_angulo - (Math.PI / 2)))); let y2 = ((_yf) + ((L / 2) * Math.sin(_angulo - (Math.PI / 2))));
+       let x3 = ((_xf) - (L * Math.cos(_angulo))); let y3 = ((_yf) - (L * Math.sin(_angulo)));
+       dibujarTriangulo(x1, y1, x2, y2, x3, y3, _color, _angulo);
+   }
+   
+   this.pintarComponentesVector = function() {
+       let xcx2 = (object_x) - (_magnitud * Math.cos(_angulo));
+       let ycx2 = object_y; // Variables usadas para pintar la recta del componente x
+
+       let xcy2 = object_x;
+       let ycy2 = (object_y) - (_magnitud * Math.sin(_angulo)); // Variables usadas para pintar la recta del componente y
+       
+       let L = 5;
+       let x1 = xcx2;
+       let y1 = ycx2 - (L / 2);
+       let x2 = xcx2;
+       let y2 = ycx2 + (L / 2);
+       let x3;
+       let y3 = ycx2;
+       
+
+       if(_angulo >= (-270 * (Math.PI / 180)) && _angulo <= (-90 * (Math.PI / 180))) {
+           x3 = xcx2 + L;
+       }
+       
+       else {
+           x3 = xcx2 - L;
+       } // Los cálculos previos se usan para pintar el triangulo en el componente x
+       
+
+       dibujarRecta(object_x, object_y, xcx2, ycx2, _color); // Trazo del componente x
+       dibujarTriangulo(x1, y1, x2, y2, x3, y3, _color); // Triangulo (para indicar vector) del componente x
+       
+       x1 = xcy2 - (L / 2);
+       y1 = ycy2;
+       x2 = xcy2 + (L / 2);
+       y2 = ycy2;
+       x3 = xcy2;
+       y3;
+
+       if(_angulo >= (-180 * (Math.PI / 180))) {
+           y3 = ycy2 + L;
+       }
+       else if (_angulo >= (-360 * (Math.PI / 180))){
+           y3 = ycy2 - L;
+       }
+
+       else {
+           y3 = ycy2 + L;
+       } // Los cálculos previos se usan para pintar el triangulo en el componente y
+
+       dibujarRecta(object_x, object_y, xcy2, ycy2, _color); // Trazo del componente y
+       dibujarTriangulo(x1, y1, x2, y2, x3, y3, _color); // Trazo del triangulo (para indicar vector) del componente y
+   }
+
+   this.imprimirDatos = function() {
+       console.log(`Magnitud: ${_magnitud}\nX: ${_componenteX}\nY: ${_componenteY}\n Angulo: ${_angulo}`);
+   }
 }
 
 //Función que dibuja un circulo con relleno usando .fill()

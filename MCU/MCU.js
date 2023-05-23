@@ -28,7 +28,8 @@ let estado_del_boton = false; // Para el boton de inicio/pausa | false → pausa
 let estado_de_simulacion = false; // false → simulador no iniciado | true → simulador iniciado
 let n_de_toques_del_start_button = 0;
 let elemento; // Contendrá el elemento (como objeto) sujeto al pendulo
-let vectorVelocidad = new Vector();
+let vectorVelocidad = new VectorVelocidad();
+let vectorAceleracion = new VectorAceleracion();
 let simular; // Contendrá el temporizador para poder realizar la animación de simulación
 let endAngle = 0; // Contendrá el valor de theta o angulo del movimiento
 let decremento = 0; // Contendrá el decremento angular por cada actualización
@@ -100,6 +101,11 @@ componentes_velocidad[0].addEventListener("change", () => {
         componentes_aceleracion[1].style.display = "none";
         componentes_aceleracion[0].checked = false;
     }
+    endAngle += decremento; pendulo();
+});
+
+componentes_aceleracion[0].addEventListener("change", () => {
+    endAngle += decremento; pendulo();
 });
 
 // Evento que modifica el valor ingresado del componente al pulsar Enter
@@ -137,6 +143,7 @@ start_button.addEventListener("click", () => {
         elemento.calcularComponentes(); // Cálculo de los componentes del movimiento
 
         vectorVelocidad.setMagnitud(elemento.getVelocidadLineal());
+        vectorAceleracion.setMagnitud(elemento.getAceleracionCentripeta());
         decremento = elemento.getVelocidadAngular() / actualizaciones_por_segundo;
         estado_de_simulacion = true;
     }
@@ -196,17 +203,31 @@ function pendulo() {
         dibujarCirculoSinRelleno(canvas_x_center, canvas_y_center, radio, 0, Math.PI * 2, "#000"); //Trazo de la trayectoria
         dibujarRecta(canvas_x_center, canvas_y_center, object_x, object_y, "#000"); //Trazo del pendulo
         dibujarCirculoRelleno(object_x, object_y, 5, 0, Math.PI * 2, "#000"); //Trazo del elemento
+        
         vectorVelocidad.setPosicionInicial(object_x, object_y);
         vectorVelocidad.setAngulo(endAngle - (Math.PI / 2));
         vectorVelocidad.calcularComponentes();
         vectorVelocidad.setPosicionFinal(vectorVelocidad.getComponenteX(), vectorVelocidad.getComponenteY());
+
+        vectorAceleracion.setPosicionInicial(object_x, object_y);
+        vectorAceleracion.setAngulo(endAngle);
+        vectorAceleracion.calcularComponentes();
+        vectorAceleracion.setPosicionFinal(vectorAceleracion.getComponenteX(), vectorAceleracion.getComponenteY());
         
-        if(checkbox_velocidad.checked) {
+        if (checkbox_velocidad.checked) {
             vectorVelocidad.pintarVector();
         }
 
         if (componentes_velocidad[0].checked) {
             vectorVelocidad.pintarComponentesVector();
+        }
+
+        if (checkbox_aceleracion.checked) {
+            vectorAceleracion.pintarVector();
+        }
+
+        if (componentes_aceleracion[0].checked) {
+            vectorAceleracion.pintarComponentesVector();
         }
         endAngle -= decremento;
     }
