@@ -17,6 +17,7 @@ const checkbox_velocidad = document.querySelector(".checkbox-velocidad");
 const componentes_velocidad = document.querySelectorAll(".componentes-velocidad");
 const checkbox_aceleracion = document.querySelector(".checkbox-aceleracion");
 const componentes_aceleracion = document.querySelectorAll(".componentes-aceleracion"); // Elementos HTML usados para controlar la visualización de vectores
+const checkbox_componentes_posicion = document.querySelector(".componentes-posicion");
 
 //Definición del tamaño del canvas en escala 1:1
 canvas.height = 600;
@@ -30,6 +31,7 @@ let n_de_toques_del_start_button = 0;
 let elemento; // Contendrá el elemento (como objeto) sujeto al pendulo
 let vectorVelocidad = new VectorVelocidad();
 let vectorAceleracion = new VectorAceleracion();
+let vectorPosicion = new VectorPosicion();
 let simular; // Contendrá el temporizador para poder realizar la animación de simulación
 let endAngle = 0; // Contendrá el valor de theta o angulo del movimiento
 let decremento = 0; // Contendrá el decremento angular por cada actualización
@@ -75,7 +77,7 @@ selector_de_parametros.addEventListener("change", () => {
 });
 
 //Evento que modifica el display del checkbox de los componentes del vector velocidad
-checkbox_velocidad.addEventListener("change", function() {
+checkbox_velocidad.addEventListener("change", () => {
     if (checkbox_velocidad.checked) {
       componentes_velocidad[0].style.display = "inline-block";
       componentes_velocidad[1].style.display = "inline-block";
@@ -92,7 +94,7 @@ componentes_velocidad[0].addEventListener("change", () => {
 });
 
 //Evento que modifica el display del checkbox de los componentes del vector aceleración
-  checkbox_aceleracion.addEventListener("change", function() {
+checkbox_aceleracion.addEventListener("change", () => {
     if (checkbox_aceleracion.checked) {
         componentes_aceleracion[0].style.display = "inline-block";
         componentes_aceleracion[1].style.display = "inline-block"
@@ -105,6 +107,10 @@ componentes_velocidad[0].addEventListener("change", () => {
 });
 
 componentes_aceleracion[0].addEventListener("change", () => {
+    endAngle += decremento; pendulo();
+});
+
+checkbox_componentes_posicion.addEventListener("change", () => {
     endAngle += decremento; pendulo();
 });
 
@@ -213,6 +219,11 @@ function pendulo() {
         vectorAceleracion.setAngulo(endAngle);
         vectorAceleracion.calcularComponentes();
         vectorAceleracion.setPosicionFinal(vectorAceleracion.getComponenteX(), vectorAceleracion.getComponenteY());
+
+        vectorPosicion.setPosicionInicial(canvas_x_center, canvas_y_center);
+        vectorPosicion.setAngulo(endAngle);
+        vectorPosicion.calcularComponentes();
+        vectorPosicion.setPosicionFinal(vectorPosicion.getComponenteX(), vectorPosicion.getComponenteY());
         
         if (checkbox_velocidad.checked) {
             vectorVelocidad.pintarVector();
@@ -228,6 +239,10 @@ function pendulo() {
 
         if (componentes_aceleracion[0].checked) {
             vectorAceleracion.pintarComponentesVector();
+        }
+
+        if (checkbox_componentes_posicion.checked) {
+            vectorPosicion.pintarComponentesVector();
         }
         endAngle -= decremento;
     }
